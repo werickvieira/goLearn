@@ -8,7 +8,7 @@ import (
 
 var wg sync.WaitGroup
 
-func getSite(url string, list *[]string, index int) {
+func getSite(url string, list *[]string) {
 	defer wg.Done()
 	response, _ := http.Get(url)
 	if response.StatusCode == http.StatusOK {
@@ -19,8 +19,8 @@ func getSite(url string, list *[]string, index int) {
 func handlerSites(arr []string) []string {
 	wg.Add(len(arr))
 	var list = make([]string, 0)
-	for index, url := range arr {
-		go getSite(url, &list, index)
+	for _, url := range arr {
+		go getSite(url, &list)
 	}
 	wg.Wait()
 	return list
